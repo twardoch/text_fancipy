@@ -31,7 +31,7 @@ Text FanciPy supports several “fancy styles” for text conversion:
 To install Text FanciPy, run:
 
 ```bash
-python3 -m pip install --upgrade text_fancipy
+python3 -m pip install --upgrade text-fancipy
 ```
 
 For the current development version: 
@@ -95,27 +95,10 @@ plain_text = unfancipy_all(fancy_text)
 ```
 
 
-## Development
-
-To contribute to FanciPy, clone the repository from GitHub and install the required development dependencies:
-
-```bash
-git clone https://github.com/twardoch/text_fancipy
-cd text_fancipy
-pip install -e .[testing]
-```
-
-## Testing
-
-Run tests using pytest:
-
-```bash
-pytest
-```
-
 ## Changes
 
-- v1.0: Initial release
+- **v1.0.3**: Minor fixes
+- **v1.0.0**: Initial release
 
 ## License
 
