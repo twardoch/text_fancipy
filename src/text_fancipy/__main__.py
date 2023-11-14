@@ -51,13 +51,14 @@ class FanciPyCLI:
         longest_name_length = max(len(fancy_name) for _, _, fancy_name in _precomputed_tables.values())
 
         # Create the table headers with appropriate padding
-        print("| style  | name" + " " * (longest_name_length - 4) + " |")
-        print("|--------|" + "-" * (longest_name_length + 2) + "|")
+        print("| style  | name" + " " * (longest_name_length - 4) + " | letters")
+        print("|--------|" + "-" * (longest_name_length + 2) + "| ---------")
 
         # Print each row with padding adjusted to the longest name
-        for style, (_, _, fancy_name) in sorted(_precomputed_tables.items()):
+        for style, (_, _, fancy_name) in _precomputed_tables.items():
             padding = " " * (longest_name_length - len(fancy_name))
-            print(f"| `{style}` | {fancy_name}{padding} |")
+            style_letters = "".join([chr(u) for u in _precomputed_tables[style][False].values()])
+            print(f"| `{style}` | {fancy_name}{padding} | `{style_letters}`")
 
 def cli():
     fancipy_cli = FanciPyCLI()

@@ -15,7 +15,7 @@ _logger = logging.getLogger(__name__)
 
 def create_tables() -> dict:
     """
-    Create translation tables for different font styles.
+    Create translation tables for different font styles. Only styles with full A-Za-z coverage in Unicode 15.0 are supported. 
 
     Returns:
         dict: A dictionary where each key is a style and each value is a tuple
@@ -26,14 +26,16 @@ def create_tables() -> dict:
         "dflt": ("A", "a", "Default"),
         "mono": ("𝙰", "𝚊", "𝙼𝚘𝚗𝚘𝚜𝚙𝚊𝚌𝚎"),
         "bold": ("𝐀", "𝐚", "𝐁𝐨𝐥𝐝"),
-        "ital": ("𝐴", "𝑎", "𝐼𝑡𝑎𝑙𝑖𝑐"),
         "bdit": ("𝑨", "𝒂", "𝑩𝒐𝒍𝒅 𝑰𝒕𝒂𝒍𝒊𝒄"),
         "sans": ("𝖠", "𝖺", "𝖲𝖺𝗇𝗌-𝗌𝖾𝗋𝗂𝖿"),
         "snbd": ("𝗔", "𝗮", "𝗦𝗮𝗻𝘀-𝘀𝗲𝗿𝗶𝗳 𝗕𝗼𝗹𝗱"),
         "snit": ("𝘈", "𝘢", "𝘚𝘢𝘯𝘴-𝘴𝘦𝘳𝘪𝘧 𝘐𝘵𝘢𝘭𝘪𝘤"),
         "snbi": ("𝘼", "𝙖", "𝙎𝙖𝙣𝙨-𝙨𝙚𝙧𝙞𝙛 𝘽𝙤𝙡𝙙 𝙄𝙩𝙖𝙡𝙞𝙘"),
-        "dbst": ("𝔸", "𝔞", "𝔻𝕠𝕦𝕓𝕝𝕖-𝕤𝕥𝕣𝕦𝕔𝕜"),
         "bscr": ("𝓐", "𝓪", "𝓑𝓸𝓵𝓭 𝓢𝓬𝓻𝓲𝓹𝓽"),
+        "frak": ("𝕬", "𝖆", "𝕱𝖗𝖆𝖐𝖙𝖚𝖗 𝕭𝖔𝖑𝖉"),
+        "parn": ("🄐", "⒜", "🄟⒜⒭⒠⒩⒮"),
+        "circ": ("Ⓐ", "ⓐ", "Ⓒⓘⓡⓒⓛⓔⓓ"),
+        "wide": ("Ａ", "ａ", "Ｗｉｄｅ"),
     }
 
     tables = {}

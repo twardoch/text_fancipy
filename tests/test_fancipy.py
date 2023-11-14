@@ -1,4 +1,4 @@
-from text_fancipy.fancipy import unfancipy_all
+from text_fancipy.fancipy import fancipy, unfancipy, unfancipy_all
 
 # test_unfancipy.py
 
@@ -10,3 +10,4 @@ def test_unfancipy_all():
     test_string = "𝗔𝘈𝘼𝙰A"  # Represents A in snbl, snit, snbi, mono, and dflt styles
     expected = "AAAAA"
     assert unfancipy_all(test_string) == expected
+
