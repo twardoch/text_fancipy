@@ -6,6 +6,7 @@ Text FanciPy is a Python tool for converting plain English letters (A-Za-z) in a
 
 - Converts the plain English letters in your text to various fancy styles (which are still plain Unicode text).
 - Converts fancy-styled text back to correct text.
+- Performs Unicode decomposition before the conversion, and Unicode normalization after the conversion. This way, accented Latin letters also get processed. 
 - Can be used via a command line interface (CLI) or imported as a Python package.
 
 Text FanciPy supports several “fancy styles” for text conversion. Only styles with full A-Za-z coverage in The Unicode Standard version 15.0 are included: 
@@ -97,6 +98,7 @@ plain_text = unfancipy_all(fancy_text)
 
 ## Changes
 
+- **v1.4.0**: Unicode decomposition and normalization
 - **v1.3.0**: Renamed some styles
 - **v1.1.0**: Change the available styles 
 - **v1.0.3**: Minor fixes
