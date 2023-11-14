@@ -113,6 +113,9 @@ Run tests using pytest:
 pytest
 ```
 
+## Changes
+
+- v1.0: Initial release
 
 ## License
 
