@@ -58,7 +58,7 @@ class FanciPyCLI:
         for style, (_, _, fancy_name) in _precomputed_tables.items():
             padding = " " * (longest_name_length - len(fancy_name))
             style_letters = "".join([chr(u) for u in _precomputed_tables[style][False].values()])
-            print(f"| `{style}` | {fancy_name}{padding} | `{style_letters}`")
+            print(f"| `{style}` | {fancy_name}{padding} | {style_letters}")
 
 def cli():
     fancipy_cli = FanciPyCLI()
