@@ -116,7 +116,8 @@ pytest
 
 ## License
 
-- Text FanciPy (c) 2023 Adam Twardoch, 
+- **Text FanciPy** written by Adam Twardoch, with assistance from GPT-4
+- Copyright (c) 2023 Adam Twardoch
 - Licensed under the [Apache-2.0 license](./LICENSE.txt)
 
 ## Contact

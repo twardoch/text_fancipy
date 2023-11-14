@@ -1,3 +1,5 @@
 # Contributors
 
-* twardoch [adam@twardoch.com](mailto:adam@twardoch.com)
+- Adam Twardoch <adam+github@twardoch.com>
+- GPT-4 <https://chat.openai.com/> 
+
