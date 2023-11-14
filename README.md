@@ -1,12 +1,12 @@
 # Text FanciPy
 
-Text FanciPy is a Python tool for converting plain English letters (A-Za-z) in a text to their Unicode counterparts in various “fancy” styles, and vice versa. However, note that any “fancy-styled” text is not proper Unicode text, so it’s not searchable, and it’s not guaranteed to be displayed correctly on all devices. It’s best used for decorative purposes only.
+Text FanciPy is a Python tool for converting regular English letters (A-Za-z) in a text to their Unicode counterparts in various “fancy” styles, and vice versa. However, note that any “fancy-styled” text is not proper Unicode text, so it’s not searchable, and it’s not guaranteed to be displayed correctly on all devices. It’s best used for decorative purposes only.
 
 ## Features
 
-- Converts the plain English letters in your text to various fancy styles (which are still plain Unicode text).
+- Converts the regular English letters in your text to various fancy styles (which are still plain Unicode text).
+- Performs Unicode decomposition before the conversion, and Unicode normalization after the conversion. This way, most accented Latin letters also get processed. 
 - Converts fancy-styled text back to correct text.
-- Performs Unicode decomposition before the conversion, and Unicode normalization after the conversion. This way, accented Latin letters also get processed. 
 - Can be used via a command line interface (CLI) or imported as a Python package.
 
 Text FanciPy supports several “fancy styles” for text conversion. Only styles with full A-Za-z coverage in The Unicode Standard version 15.0 are included: 
@@ -53,17 +53,18 @@ Convert text to a fancy style:
 fancipy <style> -t "Your text"
 ```
 
-For example, to convert to Bold style:
+For example, convert to _Script Bold_ style some text containing accented Latin letters:
 
 ```bash
-$ fancipy bold -t "Hello World"
-𝐇𝐞𝐥𝐥𝐨 𝐖𝐨𝐫𝐥𝐝
+$ fancipy scrb -t "Książęcych spóźnień czułość"
+𝓚𝓼𝓲𝓪̨𝔃̇𝓮̨𝓬𝔂𝓬𝓱 𝓼𝓹𝓸́𝔃́𝓷𝓲𝓮𝓷́ 𝓬𝔃𝓾ł𝓸𝓼́𝓬́
 ```
 
-Convert text back from a fancy style to plain text:
+Convert text back from all fancy styles back to regular text:
 
 ```bash
-fancipy undo -t "𝐇𝐞𝐥𝐥𝐨 𝐖𝐨𝐫𝐥𝐝"
+$ fancipy undo -t "𝖶𝗁𝖺𝗍 ⓐ 𝖜𝖔𝖓𝖉𝖊𝖗𝖋𝖚𝖑 𝒘𝒐𝒓𝒍𝒅!"
+What a wonderful world!
 ```
 
 ### With piping
@@ -91,8 +92,8 @@ from text_fancipy.fancipy import fancipy, unfancipy_all
 # Convert to fancy text
 fancy_text = fancipy("Your Text", "bold")
 
-# Convert back to plain text
-plain_text = unfancipy_all(fancy_text)
+# Convert back to regular text
+regular_text = unfancipy_all(fancy_text)
 ```
 
 
