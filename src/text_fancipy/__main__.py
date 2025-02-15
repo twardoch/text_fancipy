@@ -8,7 +8,7 @@ from .fancipy import fancipy, unfancipy_all, _precomputed_tables
 
 def convert(text=None, file=None, style="dflt", reverse=False, outfile=None):
     if file:
-        with open(file, "r", encoding="utf-8") as f:
+        with open(file, encoding="utf-8") as f:
             text = f.read()
 
     if text is None:
