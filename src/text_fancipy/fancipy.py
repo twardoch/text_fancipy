@@ -1,14 +1,11 @@
 #!/usr/bin/env python3
 import logging
-import sys
-import pathlib
-import fire
-try: 
+
+try:
     import unicodedata2 as unicodedata
 except ImportError:
     import unicodedata
 
-from text_fancipy import __version__
 
 __author__ = "Adam Twardoch"
 __copyright__ = "(c) 2023 Adam Twardoch"
@@ -91,9 +88,10 @@ def fancipy(text: str, style: str) -> str:
     Returns:
         str: The converted text.
     """
-    decomposed_text = unicodedata.normalize('NFD', text)
+    decomposed_text = unicodedata.normalize("NFD", text)
     converted_text = decomposed_text.translate(get_table(style, False))
-    return unicodedata.normalize('NFC', converted_text)
+    return unicodedata.normalize("NFC", converted_text)
+
 
 def unfancipy(text: str, style: str) -> str:
     """
@@ -106,9 +104,10 @@ def unfancipy(text: str, style: str) -> str:
     Returns:
         str: The converted text.
     """
-    decomposed_text = unicodedata.normalize('NFD', text)
+    decomposed_text = unicodedata.normalize("NFD", text)
     converted_text = decomposed_text.translate(get_table(style, True))
-    return unicodedata.normalize('NFC', converted_text)
+    return unicodedata.normalize("NFC", converted_text)
+
 
 def unfancipy_all(text: str) -> str:
     """

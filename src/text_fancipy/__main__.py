@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-import fire
 import sys
-from pathlib import Path
-from .fancipy import fancipy, unfancipy_all, _precomputed_tables
+
+import fire
+
+from .fancipy import _precomputed_tables, fancipy, unfancipy_all
 
 
 def convert(text=None, file=None, style="dflt", reverse=False, outfile=None):
@@ -48,7 +49,9 @@ class FanciPyCLI:
         Show available styles in a Markdown table format with appropriate padding.
         """
         # Find the length of the longest fancified style name
-        longest_name_length = max(len(fancy_name) for _, _, fancy_name in _precomputed_tables.values())
+        longest_name_length = max(
+            len(fancy_name) for _, _, fancy_name in _precomputed_tables.values()
+        )
 
         # Create the table headers with appropriate padding
         print("| style  | name" + " " * (longest_name_length - 4) + " | letters")
@@ -57,8 +60,11 @@ class FanciPyCLI:
         # Print each row with padding adjusted to the longest name
         for style, (_, _, fancy_name) in _precomputed_tables.items():
             padding = " " * (longest_name_length - len(fancy_name))
-            style_letters = "".join([chr(u) for u in _precomputed_tables[style][False].values()])
+            style_letters = "".join(
+                [chr(u) for u in _precomputed_tables[style][False].values()]
+            )
             print(f"| `{style}` | {fancy_name}{padding} | {style_letters}")
+
 
 def cli():
     fancipy_cli = FanciPyCLI()
