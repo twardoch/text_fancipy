@@ -1,1 +1,1 @@
-Merge local changes with remote updates
+Update VERSION.txt with merged changes
