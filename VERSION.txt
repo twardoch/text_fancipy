@@ -1,1 +1,5 @@
-Local changes before pull
+Local changes to VERSION.txt
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
