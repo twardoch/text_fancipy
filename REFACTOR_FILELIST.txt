@@ -1,0 +1,5 @@
+14	./README.md
+11	./LICENSE.txt
+4	./src/text_fancipy/fancipy.py
+3	./tox.ini
+2	./src/text_fancipy/__main__.py
