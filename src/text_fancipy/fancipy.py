@@ -1,10 +1,22 @@
 #!/usr/bin/env python3
+# this_file: src/text_fancipy/fancipy.py
+"""Core conversion logic for text_fancipy.
+
+Unicode Mathematical Alphanumeric Symbols (U+1D400–U+1D7FF) form contiguous
+runs of styled A-Za-z glyphs.  Each style simply shifts the ASCII code-point
+of every letter by a fixed offset, making forward and reverse tables trivial to
+build arithmetically.  Accented Latin characters are handled via NFD
+decomposition: the base letter is shifted by the table; combining marks (which
+are not in A-Za-z) pass through unchanged; NFC recomposition rebuilds the
+accented glyph afterward.
+"""
+
 import logging
 
 try:
-    import unicodedata2 as unicodedata
+    import unicodedata2 as unicodedata  # faster drop-in replacement
 except ImportError:
-    import unicodedata
+    import unicodedata  # stdlib fallback
 
 
 __author__ = "Adam Twardoch"
@@ -13,18 +25,29 @@ __license__ = "Apache-2.0"
 
 _logger = logging.getLogger(__name__)
 
+# Type alias: (forward_table, reverse_table, fancy_display_name)
+_TableEntry = tuple[dict[int, int], dict[int, int], str]
 
-def create_tables() -> dict:
-    """
-    Create translation tables for different font styles. Only styles with full A-Za-z coverage in Unicode 15.0 are supported.
+
+def create_tables() -> dict[str, _TableEntry]:
+    """Build forward and reverse translation tables for every supported style.
+
+    Each style is defined by the Unicode code-point of its styled 'A' (upper)
+    and 'a' (lower).  All other letters are computed by simple arithmetic
+    relative to those anchors, which mirrors the contiguous layout of the
+    Unicode Mathematical Alphanumeric Symbols block (U+1D400–U+1D7FF) and
+    the Enclosed Alphanumerics block (U+2460–U+24FF, U+1F110–U+1F12F) for
+    circled and parenthesised variants.
+
+    Only styles that provide full A-Za-z coverage in Unicode 15.0 are included.
 
     Returns:
-        dict: A dictionary where each key is a style and each value is a tuple
-              of two translation tables (normal and reverse) and the fancified style name.
+        A dict mapping style code → (forward_table, reverse_table, fancy_name).
     """
-    styles = {
-        # Style mappings with fancified names
+    # Each entry: (first_uppercase_char, first_lowercase_char, fancy_display_name)
+    styles: dict[str, tuple[str, str, str]] = {
         "dflt": ("A", "a", "Default"),
+        # Unicode Mathematical Alphanumeric Symbols block (U+1D400–U+1D7FF)
         "mono": ("𝙰", "𝚊", "𝙼𝚘𝚗𝚘𝚜𝚙𝚊𝚌𝚎"),
         "bold": ("𝐀", "𝐚", "𝐒𝐞𝐫𝐢𝐟 𝐁𝐨𝐥𝐝"),
         "bdit": ("𝑨", "𝒂", "𝑺𝒆𝒓𝒊𝒇 𝑩𝒐𝒍𝒅 𝑰𝒕𝒂𝒍𝒊𝒄"),
@@ -34,90 +57,107 @@ def create_tables() -> dict:
         "snbi": ("𝘼", "𝙖", "𝙎𝙖𝙣𝙨 𝘽𝙤𝙡𝙙 𝙄𝙩𝙖𝙡𝙞𝙘"),
         "scrb": ("𝓐", "𝓪", "𝓢𝓬𝓻𝓲𝓹𝓽 𝓑𝓸𝓵𝓭"),
         "frak": ("𝕬", "𝖆", "𝕱𝖗𝖆𝖐𝖙𝖚𝖗 𝕭𝖔𝖑𝖉"),
-        "parn": ("🄐", "⒜", "🄟⒜⒭⒠⒩⒮"),
-        "circ": ("Ⓐ", "ⓐ", "Ⓒⓘⓡⓒⓛⓔⓓ"),
+        # Enclosed Alphanumerics / Enclosed Alphanumeric Supplement
+        "parn": ("🄐", "⒜", "🄟⒜⒭⒠⒩⒮"),  # parenthesised
+        "circ": ("Ⓐ", "ⓐ", "Ⓒⓘⓡⓒⓛⓔⓓ"),  # circled
+        # Fullwidth Latin (U+FF21–U+FF3A, U+FF41–U+FF5A)
         "wide": ("Ａ", "ａ", "Ｗｉｄｅ"),
     }
 
-    tables = {}
+    tables: dict[str, _TableEntry] = {}
     for s, (uc, lc, fancy_name) in styles.items():
-        upper_mapping = {
-            i: i + ord(uc) - ord("A") for i in range(ord("A"), ord("Z") + 1)
-        }
-        lower_mapping = {
-            i: i + ord(lc) - ord("a") for i in range(ord("a"), ord("z") + 1)
-        }
-        upper_mapping.update(lower_mapping)
+        # Build forward mapping: ASCII ordinal → styled ordinal
+        uc_offset = ord(uc) - ord("A")
+        lc_offset = ord(lc) - ord("a")
+        forward: dict[int, int] = {}
+        for i in range(ord("A"), ord("Z") + 1):
+            forward[i] = i + uc_offset
+        for i in range(ord("a"), ord("z") + 1):
+            forward[i] = i + lc_offset
 
-        reverse_upper_mapping = {v: k for k, v in upper_mapping.items()}
+        # Reverse mapping: styled ordinal → ASCII ordinal
+        reverse: dict[int, int] = {v: k for k, v in forward.items()}
 
         tables[s] = (
-            str.maketrans(upper_mapping),
-            str.maketrans(reverse_upper_mapping),
+            str.maketrans(forward),
+            str.maketrans(reverse),
             fancy_name,
         )
 
     return tables
 
 
-_precomputed_tables = create_tables()
+_precomputed_tables: dict[str, _TableEntry] = create_tables()
 
 
-def get_table(style: str, reverse: bool) -> dict:
-    """
-    Retrieve the translation table for a given style and direction.
+def get_table(style: str, reverse: bool) -> dict[int, int]:
+    """Return the translation table for *style* in the requested direction.
 
     Args:
-        style (str): The style of the text.
-        reverse (bool): Whether to use the reverse translation table.
+        style: Style code, e.g. ``"bold"``, ``"mono"``.  Falls back to the
+            identity table (``"dflt"``) when the code is unknown.
+        reverse: ``False`` for forward (plain → fancy), ``True`` for reverse
+            (fancy → plain).
 
     Returns:
-        dict: The translation table.
+        A :func:`str.maketrans`-style mapping dict suitable for
+        :meth:`str.translate`.
     """
-    return _precomputed_tables.get(style, (None, None))[reverse]
+    entry = _precomputed_tables.get(style) or _precomputed_tables["dflt"]
+    # Index 0 = forward, 1 = reverse
+    return entry[int(reverse)]  # type: ignore[return-value]
 
 
 def fancipy(text: str, style: str) -> str:
-    """
-    Convert plain English letters in text to a fancy-styled text.
+    """Convert plain ASCII letters in *text* to the requested Unicode style.
+
+    Non-letter characters (digits, punctuation, spaces) are passed through
+    unchanged.  Accented Latin characters survive the round-trip: NFD
+    decomposition separates the base letter from its combining marks; only the
+    base letter is shifted by the style table; NFC recomposition reconstructs
+    the accented glyph.
 
     Args:
-        text (str): The text to convert.
-        style (str): The style to apply.
+        text: Input text.  May contain any Unicode characters.
+        style: Target style code.  One of the keys in
+            :data:`_precomputed_tables` (e.g. ``"bold"``, ``"scrb"``).
 
     Returns:
-        str: The converted text.
+        Text with A-Za-z replaced by their styled equivalents.
     """
-    decomposed_text = unicodedata.normalize("NFD", text)
-    converted_text = decomposed_text.translate(get_table(style, False))
-    return unicodedata.normalize("NFC", converted_text)
+    decomposed: str = unicodedata.normalize("NFD", text)
+    converted: str = decomposed.translate(get_table(style, False))
+    return str(unicodedata.normalize("NFC", converted))
 
 
 def unfancipy(text: str, style: str) -> str:
-    """
-    Convert fancy-styled text of a given style back to plain text.
+    """Reverse a specific style, converting fancy letters back to plain ASCII.
 
     Args:
-        text (str): The text to convert.
-        style (str): The style of the input text.
+        text: Fancy-styled text.
+        style: The style to undo.  Must match the style used during
+            :func:`fancipy`.
 
     Returns:
-        str: The converted text.
+        Text with styled characters replaced by their ASCII equivalents.
     """
-    decomposed_text = unicodedata.normalize("NFD", text)
-    converted_text = decomposed_text.translate(get_table(style, True))
-    return unicodedata.normalize("NFC", converted_text)
+    decomposed: str = unicodedata.normalize("NFD", text)
+    converted: str = decomposed.translate(get_table(style, True))
+    return str(unicodedata.normalize("NFC", converted))
 
 
 def unfancipy_all(text: str) -> str:
-    """
-    Convert all fancy-styled text back to plain text.
+    """Strip every known style, converting all fancy letters back to plain ASCII.
+
+    Applies :func:`unfancipy` for every registered style in sequence.  Safe to
+    call on text that mixes multiple styles or contains no styled characters at
+    all.
 
     Args:
-        text (str): The text to convert.
+        text: Text potentially containing any mix of styled Unicode letters.
 
     Returns:
-        str: The converted text.
+        Plain ASCII text with all known styles removed.
     """
     for style in _precomputed_tables:
         text = unfancipy(text, style)

@@ -1,0 +1,5 @@
+/Users/adam/Developer/vcs/github.twardoch/pub/twat-packages/_good/text_fancipy/AUTHORS.md
+
+/Users/adam/Developer/vcs/github.twardoch/pub/twat-packages/_good/text_fancipy/MANUAL_SETUP_INSTRUCTIONS.md
+
+/Users/adam/Developer/vcs/github.twardoch/pub/twat-packages/_good/text_fancipy/README.md

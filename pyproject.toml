@@ -1,9 +1,72 @@
+# this_file: pyproject.toml
 [build-system]
-# AVOID CHANGING REQUIRES: IT WILL BE UPDATED BY PYSCAFFOLD!
-requires = ["setuptools>=46.1.0", "setuptools_scm[toml]>=5"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
 
-[tool.setuptools_scm]
-# For smarter version schemes and other configuration options,
-# check out https://github.com/pypa/setuptools_scm
-version_scheme = "no-guess-dev"
+[project]
+name = "text_fancipy"
+dynamic = ["version"]
+description = "Python tool for converting plain English letters into Unicode fancy styles and back"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Adam Twardoch", email = "adam+github@twardoch.com" }]
+keywords = ["unicode", "text", "styling", "fancy", "mathematical"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Text Processing",
+    "Topic :: Text Processing :: Filters",
+    "Topic :: Text Processing :: Linguistic",
+]
+requires-python = ">=3.9"
+dependencies = ["fire", "unicodedata2"]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "ruff", "mypy"]
+
+[project.urls]
+Homepage = "https://github.com/twardoch/text_fancipy"
+Documentation = "https://twardoch.github.io/text_fancipy"
+Source = "https://github.com/twardoch/text_fancipy"
+"Bug Tracker" = "https://github.com/twardoch/text_fancipy/issues"
+
+[project.scripts]
+fancipy = "text_fancipy.__main__:cli"
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/", "tests/", "README.md", "CHANGELOG.md", "LICENSE.txt"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/text_fancipy"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
+filterwarnings = ["ignore:'pipes' is deprecated:DeprecationWarning"]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["unicodedata2", "fire", "fire.core"]
+ignore_missing_imports = true

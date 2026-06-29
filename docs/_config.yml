@@ -1,0 +1,22 @@
+title: Text FanciPy
+description: Convert plain English letters to Unicode fancy styles and back
+baseurl: "/text_fancipy"
+url: "https://twardoch.github.io"
+
+remote_theme: just-the-docs/just-the-docs
+
+color_scheme: light
+
+# Navigation
+nav_enabled: true
+
+# Footer
+footer_content: "Copyright &copy; 2023–2026 Adam Twardoch. Distributed under the <a href=\"https://www.apache.org/licenses/LICENSE-2.0\">Apache-2.0 License</a>."
+
+# Search
+search_enabled: true
+
+# Plugins
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag

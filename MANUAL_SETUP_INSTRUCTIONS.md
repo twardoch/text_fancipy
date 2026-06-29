@@ -1,63 +1,63 @@
 # Manual Setup Instructions
 
-## What Was Accomplished
+## Changes Made
 
-✅ **Successfully committed to branch `terragon/implement-semver-scripts`:**
-- Comprehensive test suite with multiple test cases
-- Local build and test scripts in `scripts/` directory
+The following were added to branch `terragon/implement-semver-scripts`:
+- Test suite with multiple test cases
+- Local build and test scripts in `scripts/`
 - CHANGELOG.md for release tracking
 - PLAN.md with implementation roadmap
-- Enhanced project structure
+- Improved project structure
 
-## What You Need to Do Manually
+## Manual Steps Required
 
 ### 1. Update GitHub Actions Workflows
 
-The GitHub App doesn't have permission to modify workflow files, so you'll need to manually update them:
+The GitHub App does not have permission to modify workflow files. You must manually update them:
 
 **Replace `.github/workflows/ci.yml` with the content from `github-workflows/ci.yml`**
 
-This enhanced workflow includes:
-- Multi-platform testing (Ubuntu, Windows, macOS)
-- Multi-Python version support (3.9, 3.10, 3.11, 3.12)
-- Code quality checks (Black, flake8, isort, mypy, bandit)
+This updated workflow includes:
+- Testing on Ubuntu, Windows, macOS
+- Support for Python versions 3.9 through 3.12
+- Code quality checks: Black, flake8, isort, mypy, bandit
 - Pre-commit hook validation
-- Automated binary builds with PyInstaller
-- GitHub Releases with release notes
-- PyPI publishing automation
+- Automated binary builds using PyInstaller
+- GitHub Releases with auto-generated release notes
+- Automatic publishing to PyPI
 
 **Add `.github/workflows/test-pr.yml` with the content from `github-workflows/test-pr.yml`**
 
-This workflow provides quick testing for pull requests.
+This workflow runs lightweight tests on pull requests.
 
 ### 2. Merge the Changes
 
-1. **Review the Pull Request:** https://github.com/twardoch/text_fancipy/pull/new/terragon/implement-semver-scripts
-2. **Merge the branch** into main
+1. **Review the Pull Request:** https://github.com/twardoch/text_fancipy/pull/new/terragon/implement-semver-scripts  
+2. **Merge the branch into main**
 3. **Manually add the workflow files** to `.github/workflows/`
 
-### 3. Test the Complete Workflow
+### 3. Test the Workflow
 
-After merging and adding the workflows:
+After merging and adding workflows:
 
-1. **Test the scripts locally:**
+1. **Run local tests:**
    ```bash
    python scripts/test.py --unit
    python scripts/build.py --python
    ```
 
-2. **Test the release workflow:**
+2. **Test release workflow:**
    ```bash
    # Create and push a test tag
    git tag v2.8.0-beta.1
    git push origin v2.8.0-beta.1
    ```
 
-3. **Monitor GitHub Actions** to ensure the workflow runs successfully
+3. **Verify GitHub Actions execution** in the repository's Actions tab
 
 ### 4. Production Release
 
-When ready for a production release:
+To make a production release:
 
 1. **Update VERSION.txt** if needed
 2. **Update CHANGELOG.md** with release notes
@@ -69,57 +69,54 @@ When ready for a production release:
 4. **GitHub Actions will automatically:**
    - Run tests on all platforms
    - Build Python packages
-   - Create standalone executables
-   - Create GitHub Release
+   - Generate standalone executables
+   - Create a GitHub Release
    - Publish to PyPI
 
-## Key Features Implemented
+## Implemented Features
 
-### 🧪 Comprehensive Testing
-- Multi-platform test coverage
-- Code quality validation
-- Performance testing
-- Edge case handling
+### Testing
+- Runs on multiple operating systems
+- Validates code quality
+- Includes performance and edge case tests
 
-### 🔧 Local Development Tools
-- `scripts/build.py` - Package building
-- `scripts/test.py` - Test execution
-- Build validation and testing
+### Development Tools
+- `scripts/build.py` – Builds the package
+- `scripts/test.py` – Runs tests
+- Built-in validation for builds
 
-### 🚀 Automated Releases
-- Git tag-based versioning
-- Multi-platform binaries
-- Automated PyPI publishing
-- GitHub Releases with assets
+### Releases
+- Triggered by Git tags
+- Cross-platform binary generation
+- Auto-publishing to PyPI
+- GitHub Releases with downloadable assets
 
-### 📦 Distribution Methods
-- **pip install text-fancipy** (Python package)
-- **Binary downloads** (no Python required)
-- **Cross-platform support** (Linux, Windows, macOS)
+### Distribution
+- Install via pip: `pip install text-fancipy`
+- Download binaries for Linux, Windows, macOS
+- No Python required for binary users
 
-## Expected Outcomes
+## Expected Results
 
-After completing the manual setup:
+Once setup is complete:
+1. Every commit and PR triggers automated testing
+2. Code quality tools help prevent bad commits
+3. Releases are as simple as pushing a tag
+4. Users can install with pip or use standalone binaries
+5. CI/CD pipeline runs like it’s supposed to (finally)
 
-1. **Automated Testing:** Every commit and PR will be tested
-2. **Quality Assurance:** Code quality checks prevent issues
-3. **Easy Releases:** Just push a git tag to release
-4. **Multiple Installation Methods:** Users can install via pip or download binaries
-5. **Professional CI/CD:** Enterprise-grade automation
+## Support Details
 
-## Support
-
-The implementation includes:
-- **92%+ test coverage** ensuring reliability
-- **Comprehensive documentation** for maintainers
-- **Automated workflows** reducing manual work
-- **Multi-platform support** for broader reach
+- **Test coverage:** Over 92%
+- **Documentation:** Maintainer-focused and reasonably complete
+- **Automation:** Reduces manual steps for testing, building, and releasing
+- **Platforms:** Works on Linux, Windows, macOS
 
 ## Next Steps
 
-1. **Merge the PR** with the scripts and tests
-2. **Add the workflow files** manually
-3. **Test with a beta release** (v2.8.0-beta.1)
-4. **Create production release** (v2.8.0)
+1. **Merge the PR** containing scripts and tests  
+2. **Manually add workflow files** to `.github/workflows/`  
+3. **Try a beta release:** `v2.8.0-beta.1`  
+4. **Make the real release:** `v2.8.0`
 
-The text-fancipy project will then have a modern, professional release pipeline with automated testing, building, and distribution. 🎉
+At that point, text-fancipy will have a modern, functional release pipeline. No more excuses.
