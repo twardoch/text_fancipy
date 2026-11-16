@@ -48,24 +48,3 @@ jobs:
       - name: mypy
         run: mypy src/text_fancipy/
 
-  publish:
-    name: Publish to PyPI
-    needs: [test, lint]
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    environment: pypi
-    permissions:
-      id-token: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-      - name: Build
-        run: |
-          pip install build hatch hatch-vcs
-          python -m build
-      - name: Publish
-        uses: pypa/gh-action-pypi-publish@release/v1

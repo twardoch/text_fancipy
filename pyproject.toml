@@ -70,3 +70,6 @@ disallow_untyped_defs = true
 [[tool.mypy.overrides]]
 module = ["unicodedata2", "fire", "fire.core"]
 ignore_missing_imports = true
+
+[tool.hatch.build.hooks.vcs]
+version-file = "src/text_fancipy/__version__.py"
