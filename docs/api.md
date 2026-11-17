@@ -71,7 +71,7 @@ Safe on text that mixes multiple styles or contains no styled characters.
 **Returns** `str`
 
 ```python
-mixed = "𝐇𝐞𝐥𝐥𝐨" + " " + "𝗪𝗼𝗿𝗹𝗱"   # bold + sans-bold
+mixed = "𝐇𝐞𝐥𝐥𝐨" + " " + "𝗪𝗼𝗿𝗹𝗱"  # bold + sans-bold
 unfancipy_all(mixed)
 # → 'Hello World'
 ```
